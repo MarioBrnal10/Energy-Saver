@@ -1,50 +1,86 @@
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
+    background: #2c3e50;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
-    margin: 0;
+    color: #fff;
 }
 
 .login-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    display: flex;
+    width: 800px;
+    height: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.login-container h1 {
-    text-align: center;
+.login-form {
+    background: #1c2833;
+    padding: 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Alinea los elementos al centro horizontalmente */
+}
+
+.login-form h1 {
     margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center; /* Centra el texto */
 }
 
-.login-container label {
-    display: block;
-    margin-bottom: 5px;
+.login-form label {
+    margin-top: 10px;
+    font-size: 14px;
+    width: 100%; /* Asegura que las etiquetas ocupen el ancho completo */
 }
 
-.login-container input {
+.login-form input[type="email"],
+.login-form input[type="password"] {
     width: 100%;
     padding: 10px;
+    margin-top: 5px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.login-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007BFF;
     border: none;
     border-radius: 5px;
-    color: #ffffff;
-    font-size: 16px;
-    cursor: pointer;
+    background: #34495e;
+    color: #fff;
 }
 
-.login-container button:hover {
-    background-color: #0056b3;
+.login-form .remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+}
+
+.login-form .remember-me input {
+    margin-right: 5px;
+}
+
+.login-form button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #2980b9;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 50%; /* Ajusta el ancho del botón */
+    text-align: center; /* Centra el texto dentro del botón */
+}
+
+.login-form button:hover {
+    background: #3498db;
+}
+
+.login-bg {
+    flex: 1;
+    background: url('../img/L.gif') no-repeat center center/cover;
 }
