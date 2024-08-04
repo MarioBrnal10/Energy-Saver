@@ -10,8 +10,47 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/highcharts-3d.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <style>
+        .transparent-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con 80% de opacidad */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .chart-container {
+            width: 70%;
+            height: 400px; /* Ajusta la altura según sea necesario */
+            display: inline-block;
+        }
+        .color-bar-container {
+            width: 20%;
+            height: 400px; /* Ajusta la altura según sea necesario */
+            display: inline-block;
+            position: relative;
+            margin-left: 10px;
+        }
+        .color-bar {
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(to top, green, yellow, orange, red);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid black;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
 </head>
-<body>
+<body style="margin: 0; font-family: Arial, sans-serif; background: url('img/Fondo.jpg') no-repeat center center fixed; background-size: cover;">
     
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -34,13 +73,17 @@
         </div>
     </nav>
 
-    <div class="title-container">
+    <div class="title-container transparent-container">
         <h1>Gráfica de Consumo Eléctrico</h1>
     </div>
     <br>
     <div class="chart-section">
-        <div class="container">
+        <div class="container transparent-container">
             <div id="consumptionChart" class="chart-container"></div>
+            <div class="color-bar-container">
+                <div class="color-bar"></div>
+                <div id="consumptionArrow" class="arrow"></div>
+            </div>
             <div class="message-container">
                 <p id="mostConsumptionMessage"></p>
                 <p id="totalConsumptionMessage"></p>
@@ -49,37 +92,28 @@
             </div>
         </div>
     </div>
-    <div class="button-container">
-        <button onclick="location.href='Calcu.html'">Volver a la Calculadora</button>
+    <div class="button-container transparent-container">
+        <button onclick="location.href='calcu.html'">Volver a la Calculadora</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var appliances = JSON.parse(localStorage.getItem('appliances')) || [];
 
             var labels = appliances.map(function(appliance) {
-                return appliance.brand + ' ' + appliance.appliance;
+                return appliance.brandAppliance;
             });
 
             var data = appliances.map(function(appliance) {
                 return {
-                    name: appliance.brand + ' ' + appliance.appliance,
-                    y: appliance.consumption * appliance.hours,
-                    sliced: true,  // Separar cada sección
-                    selected: true // Asegurar que cada sección se mantenga separada
+                    name: appliance.brandAppliance,
+                    y: appliance.monthlyConsumption,
+                    sliced: true,
+                    selected: true
                 };
             });
 
             var costs = appliances.map(function(appliance) {
-                var dailyConsumption = (appliance.consumption * appliance.hours);
-                var cost;
-                if (dailyConsumption <= 75) {
-                    cost = dailyConsumption * 0.809;
-                } else if (dailyConsumption <= 140) {
-                    cost = dailyConsumption * 0.976;
-                } else {
-                    cost = dailyConsumption * 2.85;
-                }
-                return cost;
+                return appliance.cost;
             });
 
             var maxConsumption = Math.max(...data.map(d => d.y));
@@ -88,8 +122,8 @@
             var maxCost = costs[maxIndex];
 
             var totalConsumption = data.reduce((sum, d) => sum + d.y, 0);
-            var weeklyConsumption = totalConsumption * 7;
-            var monthlyConsumption = totalConsumption * 30;
+            var weeklyConsumption = totalConsumption / 30 * 7;
+            var monthlyConsumption = totalConsumption;
 
             var mostConsumptionMessage = document.getElementById('mostConsumptionMessage');
             var totalConsumptionMessage = document.getElementById('totalConsumptionMessage');
@@ -100,6 +134,8 @@
             totalConsumptionMessage.style.color = 'black';
             weeklyConsumptionMessage.style.color = 'black';
             monthlyConsumptionMessage.style.color = 'black';
+
+            mostConsumptionMessage.textContent = `El electrodoméstico con más gasto en kWh es: ${mostConsumingAppliance} con un costo mensual de $${maxCost.toFixed(2)}.`;
 
             if (monthlyConsumption <= 300) {
                 monthlyConsumptionMessage.className = 'consumo-bajo';
@@ -112,9 +148,14 @@
                 monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es alto.`;
             }
 
-            totalConsumptionMessage.textContent = `Consumo total diario: ${totalConsumption.toFixed(2)} kWh.`;
+            totalConsumptionMessage.textContent = `Consumo total diario: ${(totalConsumption / 30).toFixed(2)} kWh.`;
             weeklyConsumptionMessage.textContent = `Consumo total semanal: ${weeklyConsumption.toFixed(2)} kWh.`;
-            mostConsumptionMessage.textContent = `El electrodoméstico con más gasto en kWh es: ${mostConsumingAppliance} con un costo de $${maxCost.toFixed(2)}.`;
+
+            // Adjust arrow position based on monthly consumption
+            var arrow = document.getElementById('consumptionArrow');
+            var arrowPosition = (monthlyConsumption / 900) * 100; // Assuming 900 kWh is the maximum
+            if (arrowPosition > 100) arrowPosition = 100; // Cap at 100%
+            arrow.style.top = (100 - arrowPosition) + '%'; // Invert percentage for positioning
 
             Highcharts.chart('consumptionChart', {
                 chart: {
@@ -144,6 +185,69 @@
                             connectorColor: 'silver'
                         },
                         showInLegend: true
+                    }
+                },
+                exporting: {
+                    chartOptions: {
+                        chart: {
+                            events: {
+                                load: function () {
+                                    // Add the color bar and arrow to the export
+                                    var renderer = this.renderer;
+                                    var colorBarWidth = 20;
+                                    var colorBarHeight = 400;
+                                    var chartHeight = this.chartHeight;
+                                    var chartWidth = this.chartWidth;
+                                    var arrowSize = 10;
+
+                                    // Create the color bar
+                                    renderer.rect(chartWidth - colorBarWidth - 50, 50, colorBarWidth, colorBarHeight)
+                                        .attr({
+                                            fill: 'url(#gradient)',
+                                            stroke: 'black',
+                                            'stroke-width': 1
+                                        })
+                                        .add();
+
+                                    // Create the arrow
+                                    var arrowTop = 50 + (colorBarHeight - (arrowPosition / 100 * colorBarHeight));
+                                    renderer.path(['M', chartWidth - colorBarWidth - 55, arrowTop, 'L', chartWidth - colorBarWidth - 45, arrowTop, 'L', chartWidth - colorBarWidth - 50, arrowTop + arrowSize, 'Z'])
+                                        .attr({
+                                            fill: 'black',
+                                            stroke: 'black',
+                                            'stroke-width': 1
+                                        })
+                                        .add();
+                                }
+                            }
+                        },
+                        defs: {
+                            gradient: {
+                                id: 'gradient',
+                                tagName: 'linearGradient',
+                                x1: '0%',
+                                y1: '100%',
+                                x2: '0%',
+                                y2: '0%',
+                                children: [{
+                                    tagName: 'stop',
+                                    offset: '0%',
+                                    'stop-color': 'green'
+                                }, {
+                                    tagName: 'stop',
+                                    offset: '25%',
+                                    'stop-color': 'yellow'
+                                }, {
+                                    tagName: 'stop',
+                                    offset: '50%',
+                                    'stop-color': 'orange'
+                                }, {
+                                    tagName: 'stop',
+                                    offset: '100%',
+                                    'stop-color': 'red'
+                                }]
+                            }
+                        }
                     }
                 },
                 series: [{
