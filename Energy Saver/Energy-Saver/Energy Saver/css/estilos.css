@@ -1,0 +1,137 @@
+/* styles.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2; /* Light gray */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos para diferentes niveles de consumo */
+.consumo-bajo {
+    color: green;
+}
+
+.consumo-moderado {
+    color: yellow;
+}
+
+.consumo-alto {
+    color: red;
+}
+
+/* Letras negras para los mensajes de consumo */
+.message-container p {
+    color: black;
+}
+
+/* Estilo para el título */
+.title-container h1 {
+    color: black; /* Cambia el color del texto del h1 a negro */
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #333; /* Black */
+    color: #fff; /* White */
+    padding: 10px 20px;
+    height: 70px; /* Ajusta este valor para cambiar la altura de la barra de menú */
+    display: flex; /* Cambiar a flexbox */
+    align-items: center; /* Alinear verticalmente el contenido */
+    justify-content: center; /* Centrar todo el contenido horizontalmente */
+}
+
+.navbar .logo {
+    /* Agregar un contenedor para el logo */
+    display: flex;
+    align-items: center;
+    margin-right: auto; /* Alinear el logo a la izquierda */
+}
+
+.navbar .logo img {
+    /* Estilos para la imagen del logo */
+    max-height: 50px; /* Ajustar la altura del logo */
+}
+
+.navbar .navbar-nav {
+    /* Eliminar estilos previos */
+    display: flex;
+    flex-grow: 1; /* Permitir que el navbar se expanda */
+    justify-content: center; /* Centrar los elementos */
+}
+
+.navbar .navbar-nav .nav-link {
+    /* Conservar estilos de texto */
+    color: #fff;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    /* Conservar estilo de hover */
+    color: #99b899; /* Darker greenish-blue */
+}
+
+/* Container Styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+p {
+    line-height: 1.6;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+ul {
+    /* Conservar estilos de lista */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    /* Conservar margen entre elementos de la lista */
+    margin: 0 10px;
+}
+
+/* Button Styles */
+button {
+    background-color: #333; /* Black */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1a1a1a; /* Darker black */
+}
+
+/* Link Styles */
+a {
+    color: #333; /* Black */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #99b899; /* Darker greenish-blue */
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../Energy Saver/img/logotipo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../Energy Saver/css/estilos.css"> 
+    <link rel="stylesheet" href="../Energy Saver/css/calcu.css">
+    <title>Calculadora De Consumo</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="home.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="calcu.html">Calculadora</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="productos.html">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contacto.html">Contacto</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    
+    <div class="calculadora-container">
+        <div class="calculator-section">
+            <div class="content">
+                <div class="dropdown-input-container">
+                    <label for="brandOptions">Elige una Marca:</label>
+                    <select id="brandOptions" name="brandOptions">
+                        <option value="" disabled selected>Elige una Marca</option>
+                        <option value="samsung">Samsung</option>
+                        <option value="lg">LG</option>
+                        <option value="whirlpool">Whirlpool</option>
+                        <option value="mabe">Mabe</option>
+                    </select>
+                </div>
+            </div>
+            <div class="content">
+                <div class="dropdown-input-container">
+                    <label for="applianceOptions">Elige un Electrodoméstico:</label>
+                    <select id="applianceOptions" name="applianceOptions">
+                        <option value="" disabled selected>Elige un Electrodoméstico</option>
+                        <option value="refrigerador">Refrigerador</option>
+                        <option value="microondas">Horno de Microondas</option>
+                        <option value="licuadora">Licuadora</option>
+                        <option value="estufa">Estufa</option>
+                    </select>
+                </div>
+            </div>
+            <div class="container">
+                <label for="hoursInput">Introduce las horas de uso al día:</label>
+                <input type="number" id="hoursInput" value="" min="1" step="1">
+            </div>
+            <div class="buttons">
+                <button onclick="addAppliance()">Guardar Electrodoméstico</button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="table-section">
+        <div class="container">
+            <h2>Lista de Electrodomésticos</h2>
+            <table id="applianceTable">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Electrodoméstico</th>
+                        <th>Consumo Eléctrico (kWh)</th>
+                        <th>Horas de Uso (h/día)</th>
+                        <th>Costo Diario</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas de electrodomésticos se agregarán aquí -->
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div>
+            <h2>Total Consumo Eléctrico y Costo</h2>
+            <p id="totalConsumption">Consumo Total: 0 kWh</p>
+            <p id="totalCost">Costo Total Diario: $0.00</p>
+        </div>
+    </div>
+    <div class="buttons">
+        <button onclick="storeDataAndRedirect()">Calcular</button>
+    </div>
+    <script>
+        const applianceConsumption = {
+            'samsung': {
+                'refrigerador': 1.5,
+                'microondas': 1.2,
+                'licuadora': 0.5,
+                'estufa': 2.0
+            },
+            'lg': {
+                'refrigerador': 1.6,
+                'microondas': 1.3,
+                'licuadora': 0.6,
+                'estufa': 2.1
+            },
+            'whirlpool': {
+                'refrigerador': 1.7,
+                'microondas': 1.4,
+                'licuadora': 0.7,
+                'estufa': 2.2
+            },
+            'mabe': {
+                'refrigerador': 1.8,
+                'microondas': 1.5,
+                'licuadora': 0.8,
+                'estufa': 2.3
+            }
+        };
+
+        function addAppliance() {
+            var brand = document.getElementById("brandOptions").value;
+            var appliance = document.getElementById("applianceOptions").value;
+            var hours = document.getElementById("hoursInput").value;
+
+            if (!brand || !appliance || !hours) {
+                alert("Por favor, selecciona una marca, un electrodoméstico y las horas de uso.");
+                return;
+            }
+
+            var consumption = applianceConsumption[brand][appliance];
+            var dailyConsumption = (consumption * hours); // Consumo diario en kWh
+
+            var cost;
+            if (dailyConsumption <= 75) {
+                cost = dailyConsumption * 0.809;
+            } else if (dailyConsumption <= 140) {
+                cost = dailyConsumption * 0.976;
+            } else {
+                cost = dailyConsumption * 2.85;
+            }
+
+            var table = document.getElementById("applianceTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+
+            var brandCell = newRow.insertCell(0);
+            var applianceCell = newRow.insertCell(1);
+            var consumptionCell = newRow.insertCell(2);
+            var hoursCell = newRow.insertCell(3);
+            var costCell = newRow.insertCell(4);
+            var actionCell = newRow.insertCell(5);
+
+            brandCell.textContent = document.querySelector('#brandOptions option[value="' + brand + '"]').textContent;
+            applianceCell.textContent = document.querySelector('#applianceOptions option[value="' + appliance + '"]').textContent;
+            consumptionCell.textContent = consumption;
+            hoursCell.textContent = hours;
+            costCell.textContent = `$${cost.toFixed(2)}`;
+
+            var removeButton = document.createElement("button");
+            removeButton.textContent = "Eliminar";
+            removeButton.onclick = function() {
+                table.deleteRow(newRow.rowIndex - 1);
+                updateTotals();
+                updateLocalStorage();
+            };
+            actionCell.appendChild(removeButton);
+
+            // Clear the inputs
+            document.getElementById("brandOptions").selectedIndex = 0;
+            document.getElementById("applianceOptions").selectedIndex = 0;
+            document.getElementById("hoursInput").value = "";
+
+            updateTotals();
+            updateLocalStorage();
+        }
+
+        function updateTotals() {
+            var table = document.getElementById("applianceTable").getElementsByTagName('tbody')[0];
+            var rows = table.getElementsByTagName('tr');
+            var totalConsumption = 0;
+            var totalCost = 0;
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                var consumption = parseFloat(cells[2].textContent);
+                var hours = parseFloat(cells[3].textContent);
+                var dailyConsumption = (consumption * hours);
+                totalConsumption += dailyConsumption;
+
+                var cost;
+                if (dailyConsumption <= 75) {
+                    cost = dailyConsumption * 0.809;
+                } else if (dailyConsumption <= 140) {
+                    cost = dailyConsumption * 0.976;
+                } else {
+                    cost = dailyConsumption * 2.85;
+                }
+                totalCost += cost;
+            }
+
+            document.getElementById("totalConsumption").textContent = `Consumo Total: ${totalConsumption.toFixed(2)} kWh`;
+            document.getElementById("totalCost").textContent = `Costo Total Diario: $${totalCost.toFixed(2)}`;
+        }
+
+        function updateLocalStorage() {
+            var table = document.getElementById("applianceTable").getElementsByTagName('tbody')[0];
+            var rows = table.getElementsByTagName('tr');
+            var appliances = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].getElementsByTagName('td');
+                appliances.push({
+                    brand: cells[0].textContent,
+                    appliance: cells[1].textContent,
+                    consumption: parseFloat(cells[2].textContent),
+                    hours: parseFloat(cells[3].textContent),
+                    cost: parseFloat(cells[4].textContent.replace('$', ''))
+                });
+            }
+
+            localStorage.setItem('appliances', JSON.stringify(appliances));
+        }
+
+        function storeDataAndRedirect() {
+            updateLocalStorage();
+            window.location.href = 'visualizacion.html';
+        }
+    </script>
+    
+</body>
+</html>

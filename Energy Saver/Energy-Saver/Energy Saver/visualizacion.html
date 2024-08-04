@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Energy Saver/css/estilos.css">
+    <link rel="stylesheet" href="../Energy Saver/css/grafica.css">
+    <link rel="icon" href="../Energy Saver/img/logotipo.ico" type="image/x-icon">
+    <title>Gráfica de Consumo</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="home.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="calcu.html">Calculadora</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="productos.html">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contacto.html">Contacto</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="title-container">
+        <h1>Gráfica de Consumo Eléctrico</h1>
+    </div>
+    <br>
+    <div class="chart-section">
+        <div class="container">
+            <div id="consumptionChart" class="chart-container"></div>
+            <div class="message-container">
+                <p id="mostConsumptionMessage"></p>
+                <p id="totalConsumptionMessage"></p>
+                <p id="weeklyConsumptionMessage"></p>
+                <p id="monthlyConsumptionMessage"></p>
+            </div>
+        </div>
+    </div>
+    <div class="button-container">
+        <button onclick="location.href='Calcu.html'">Volver a la Calculadora</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var appliances = JSON.parse(localStorage.getItem('appliances')) || [];
+
+            var labels = appliances.map(function(appliance) {
+                return appliance.brand + ' ' + appliance.appliance;
+            });
+
+            var data = appliances.map(function(appliance) {
+                return {
+                    name: appliance.brand + ' ' + appliance.appliance,
+                    y: appliance.consumption * appliance.hours,
+                    sliced: true,  // Separar cada sección
+                    selected: true // Asegurar que cada sección se mantenga separada
+                };
+            });
+
+            var costs = appliances.map(function(appliance) {
+                var dailyConsumption = (appliance.consumption * appliance.hours);
+                var cost;
+                if (dailyConsumption <= 75) {
+                    cost = dailyConsumption * 0.809;
+                } else if (dailyConsumption <= 140) {
+                    cost = dailyConsumption * 0.976;
+                } else {
+                    cost = dailyConsumption * 2.85;
+                }
+                return cost;
+            });
+
+            var maxConsumption = Math.max(...data.map(d => d.y));
+            var maxIndex = data.findIndex(d => d.y === maxConsumption);
+            var mostConsumingAppliance = labels[maxIndex];
+            var maxCost = costs[maxIndex];
+
+            var totalConsumption = data.reduce((sum, d) => sum + d.y, 0);
+            var weeklyConsumption = totalConsumption * 7;
+            var monthlyConsumption = totalConsumption * 30;
+
+            var mostConsumptionMessage = document.getElementById('mostConsumptionMessage');
+            var totalConsumptionMessage = document.getElementById('totalConsumptionMessage');
+            var weeklyConsumptionMessage = document.getElementById('weeklyConsumptionMessage');
+            var monthlyConsumptionMessage = document.getElementById('monthlyConsumptionMessage');
+
+            mostConsumptionMessage.style.color = 'black';
+            totalConsumptionMessage.style.color = 'black';
+            weeklyConsumptionMessage.style.color = 'black';
+            monthlyConsumptionMessage.style.color = 'black';
+
+            if (monthlyConsumption <= 300) {
+                monthlyConsumptionMessage.className = 'consumo-bajo';
+                monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es bajo.`;
+            } else if (monthlyConsumption <= 900) {
+                monthlyConsumptionMessage.className = 'consumo-moderado';
+                monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es moderado.`;
+            } else {
+                monthlyConsumptionMessage.className = 'consumo-alto';
+                monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es alto.`;
+            }
+
+            totalConsumptionMessage.textContent = `Consumo total diario: ${totalConsumption.toFixed(2)} kWh.`;
+            weeklyConsumptionMessage.textContent = `Consumo total semanal: ${weeklyConsumption.toFixed(2)} kWh.`;
+            mostConsumptionMessage.textContent = `El electrodoméstico con más gasto en kWh es: ${mostConsumingAppliance} con un costo de $${maxCost.toFixed(2)}.`;
+
+            Highcharts.chart('consumptionChart', {
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0,
+                        depth: 70,
+                        viewDistance: 25
+                    }
+                },
+                title: {
+                    text: 'Consumo Eléctrico por Electrodoméstico'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.percentage:.1f} %',
+                            connectorColor: 'silver'
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: 'Consumo',
+                    data: data
+                }]
+            });
+        });
+    </script>
+</body>
+</html>
