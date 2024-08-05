@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Energy Saver/css/estilos.css">
+    <link rel="stylesheet" href="../Energy Saver/css/grafica.css">
+    <link rel="icon" href="../Energy Saver/img/logotipo.ico" type="image/x-icon">
+    <title>Consejos y Recomendaciones</title>
+    <style>
+        .transparent-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con 80% de opacidad */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .recomendaciones-container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        .recomendaciones {
+            list-style-type: none;
+            padding: 0;
+        }
+        .recomendaciones li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif; background: url('img/Fondo.jpg') no-repeat center center fixed; background-size: cover;">
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="home.html">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="calcu.html">Calculadora</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="productos.html">Productos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="contacto.html">Contacto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="grafica.html">Gráfica</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="consejos.html">Consejos y Recomendaciones</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+
+    <div class="recomendaciones-container">
+        <h1>Consejos y Recomendaciones</h1>
+        <ul class="recomendaciones" id="recomendacionesList">
+            <!-- Las recomendaciones se cargarán aquí -->
+        </ul>
+        <div class="button-container transparent-container">
+            <button onclick="location.href='visualizacion.html'">Volver a la Gráfica</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var consumptionLevel = localStorage.getItem('consumptionLevel');
+            var recomendacionesList = document.getElementById('recomendacionesList');
+
+            var recomendaciones = {
+                bajo: [
+                    "Apaga las luces cuando no las necesites.",
+                    "Desconecta los electrodomésticos que no uses.",
+                    "Aprovecha la luz natural.",
+                    "Utiliza bombillas LED.",
+                    "Mantén limpio el filtro de aire del aire acondicionado.",
+                    "Utiliza programas de ahorro en la lavadora.",
+                    "Seca la ropa al aire libre en lugar de usar la secadora.",
+                    "Revisa que el refrigerador esté bien cerrado.",
+                    "Usa electrodomésticos eficientes.",
+                    "No dejes los cargadores enchufados si no están en uso.",
+                ],
+                moderado: [
+                    "Reduce el uso del aire acondicionado.",
+                    "Apaga los equipos electrónicos en lugar de dejarlos en standby.",
+                    "Optimiza el uso de la calefacción.",
+                    "Usa regletas para desconectar varios dispositivos a la vez.",
+                    "Ajusta el termostato del calentador de agua.",
+                    "Instala ventanas de doble acristalamiento.",
+                    "Revisa el aislamiento de tu hogar.",
+                    "Cambia los filtros del aire acondicionado regularmente.",
+                    "Usa la lavadora y lavavajillas solo con carga completa.",
+                    "Reduce el tiempo de uso del horno eléctrico.",
+                ],
+                alto: [
+                    "Considera la instalación de paneles solares.",
+                    "Reemplaza los electrodomésticos antiguos por modelos eficientes.",
+                    "Instala un sistema de gestión de energía en tu hogar.",
+                    "Revisa la tarifa eléctrica contratada.",
+                    "Realiza auditorías energéticas periódicas.",
+                    "Invierte en aislamiento térmico para tu hogar.",
+                    "Usa ventiladores de techo para reducir el uso de aire acondicionado.",
+                    "Controla el uso de la calefacción y aire acondicionado con termostatos programables.",
+                    "Implementa un sistema de iluminación inteligente.",
+                    "Considera el uso de energía renovable.",
+                ]
+            };
+
+            if (consumptionLevel && recomendaciones[consumptionLevel]) {
+                recomendaciones[consumptionLevel].forEach(function(consejo) {
+                    var li = document.createElement('li');
+                    li.textContent = consejo;
+                    recomendacionesList.appendChild(li);
+                });
+            } else {
+                var li = document.createElement('li');
+                li.textContent = 'No hay recomendaciones disponibles.';
+                recomendacionesList.appendChild(li);
+            }
+        });
+    </script>
+</body>
+</html>

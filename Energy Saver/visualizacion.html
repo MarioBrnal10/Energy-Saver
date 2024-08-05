@@ -94,6 +94,7 @@
     </div>
     <div class="button-container transparent-container">
         <button onclick="location.href='calcu.html'">Volver a la Calculadora</button>
+        <button onclick="location.href='consejos.html'">Ver Consejos y Recomendaciones</button>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -140,12 +141,15 @@
             if (monthlyConsumption <= 300) {
                 monthlyConsumptionMessage.className = 'consumo-bajo';
                 monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es bajo.`;
+                localStorage.setItem('consumptionLevel', 'bajo');
             } else if (monthlyConsumption <= 900) {
                 monthlyConsumptionMessage.className = 'consumo-moderado';
                 monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es moderado.`;
+                localStorage.setItem('consumptionLevel', 'moderado');
             } else {
                 monthlyConsumptionMessage.className = 'consumo-alto';
                 monthlyConsumptionMessage.textContent = `Consumo total mensual: ${monthlyConsumption.toFixed(2)} kWh. El consumo es alto.`;
+                localStorage.setItem('consumptionLevel', 'alto');
             }
 
             totalConsumptionMessage.textContent = `Consumo total diario: ${(totalConsumption / 30).toFixed(2)} kWh.`;

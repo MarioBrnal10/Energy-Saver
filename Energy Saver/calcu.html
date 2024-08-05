@@ -48,10 +48,7 @@
                     <label for="brandOptions">Elige una Marca:</label>
                     <select id="brandOptions" name="brandOptions" onchange="updateApplianceOptions()">
                         <option value="" disabled selected>Elige una Marca</option>
-                        <option value="samsung">Samsung</option>
-                        <option value="lg">LG</option>
-                        <option value="whirlpool">Whirlpool</option>
-                        <option value="mabe">Mabe</option>
+                        <!-- Marcas se cargarán aquí desde JavaScript -->
                     </select>
                 </div>
             </div>
@@ -151,56 +148,68 @@
     </div>
     <br>
     <script>
-        const applianceConsumption = {
-            'samsung': {
-                'refrigerador': { power: 150, cycle: 0.33 },
-                'microondas': { power: 1000, cycle: 0.1 },
-                'licuadora': { power: 500, cycle: 0.05 },
-                'estufa': { power: 2000, cycle: 0.3 }
-            },
-            'lg': {
-                'refrigerador': { power: 150, cycle: 0.33 },
-                'microondas': { power: 1000, cycle: 0.1 },
-                'licuadora': { power: 600, cycle: 0.05 },
-                'estufa': { power: 2100, cycle: 0.3 }
-            },
-            'whirlpool': {
-                'refrigerador': { power: 150, cycle: 0.33 },
-                'microondas': { power: 1000, cycle: 0.1 },
-                'licuadora': { power: 700, cycle: 0.05 },
-                'estufa': { power: 2200, cycle: 0.3 }
-            },
-            'mabe': {
-                'refrigerador': { power: 150, cycle: 0.33 },
-                'microondas': { power: 1000, cycle: 0.1 },
-                'licuadora': { power: 800, cycle: 0.05 },
-                'estufa': { power: 2300, cycle: 0.3 }
-            }
-        };
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('get_brands.php')
+                .then(response => response.json())
+                .then(data => {
+                    var brandSelect = document.getElementById("brandOptions");
+                    data.forEach(brand => {
+                        var option = document.createElement("option");
+                        option.value = brand.id;
+                        option.textContent = brand.nombre;
+                        brandSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching brands:', error);
+                    alert('Ocurrió un error al obtener las marcas.');
+                });
+        });
 
         function updateApplianceOptions() {
-            var brand = document.getElementById("brandOptions").value;
+            var brandId = document.getElementById("brandOptions").value;
             var applianceSelect = document.getElementById("applianceOptions");
             applianceSelect.innerHTML = '<option value="" disabled selected>Elige un Electrodoméstico</option>';
 
-            if (brand) {
-                var appliances = applianceConsumption[brand];
-                for (var appliance in appliances) {
-                    var option = document.createElement("option");
-                    option.value = appliance;
-                    option.textContent = capitalizeFirstLetter(appliance);
-                    applianceSelect.appendChild(option);
-                }
+            if (brandId) {
+                fetch('get_appliances.php?brandId=' + encodeURIComponent(brandId))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            data.forEach(appliance => {
+                                var option = document.createElement("option");
+                                option.value = appliance.id;
+                                option.textContent = appliance.nombre;
+                                applianceSelect.appendChild(option);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching appliances:', error);
+                        alert('Ocurrió un error al obtener los electrodomésticos.');
+                    });
             }
         }
 
         function displayPower() {
-            var brand = document.getElementById("brandOptions").value;
-            var appliance = document.getElementById("applianceOptions").value;
+            var applianceId = document.getElementById("applianceOptions").value;
 
-            if (brand && appliance) {
-                var power = applianceConsumption[brand][appliance].power;
-                document.getElementById("powerDisplay").value = power + " W";
+            if (applianceId) {
+                fetch('get_appliances.php?id=' + encodeURIComponent(applianceId))
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            document.getElementById("powerDisplay").value = data.potencia + " W";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching power:', error);
+                        alert('Ocurrió un error al obtener la potencia.');
+                    });
             } else {
                 document.getElementById("powerDisplay").value = "";
             }
@@ -208,19 +217,27 @@
 
         function addAppliance() {
             var brand = document.getElementById("brandOptions").value;
-            var appliance = document.getElementById("applianceOptions").value;
-            var power = applianceConsumption[brand][appliance].power;
-            var cycle = applianceConsumption[brand][appliance].cycle;
+            var applianceSelect = document.getElementById("applianceOptions");
+            var applianceText = applianceSelect.options[applianceSelect.selectedIndex].text;
+            var applianceId = applianceSelect.value;
+            var power = parseFloat(document.getElementById("powerDisplay").value);
             var hours = parseInt(document.getElementById("hoursInput").value);
             var minutes = parseInt(document.getElementById("minutesInput").value);
 
-            if (!brand || !appliance || isNaN(hours) || isNaN(minutes)) {
+            if (!brand || !applianceId || isNaN(hours) || isNaN(minutes)) {
                 alert("Por favor, selecciona una marca, un electrodoméstico, y las horas o minutos de uso.");
                 return;
             }
 
-            var totalHours = hours + (minutes / 60);
-            var dailyConsumption = power * totalHours * cycle; // Consumo diario en Wh
+            // Ajuste para refrigeradores
+            var totalHours;
+            if (applianceText.toLowerCase().includes('refrigerador')) {
+                totalHours = 8; // Suponemos que los refrigeradores están en funcionamiento promedio 8 horas al día
+            } else {
+                totalHours = hours + (minutes / 60);
+            }
+
+            var dailyConsumption = power * totalHours; // Consumo diario en Wh
             var monthlyConsumption = dailyConsumption * 30; // Consumo mensual en Wh
 
             var cost;
@@ -250,7 +267,7 @@
             };
             actionCell.appendChild(removeButton);
 
-            brandApplianceCell.textContent = `${document.querySelector('#brandOptions option[value="' + brand + '"]').textContent} - ${document.querySelector('#applianceOptions option[value="' + appliance + '"]').textContent}`;
+            brandApplianceCell.textContent = `${brand} - ${applianceText}`;
             dailyConsumptionCell.textContent = dailyConsumption.toFixed(2);
             monthlyConsumptionCell.textContent = (monthlyConsumption / 1000).toFixed(2);
             costCell.textContent = `$${cost.toFixed(2)}`;
@@ -305,10 +322,6 @@
         function storeDataAndRedirect() {
             updateLocalStorage();
             window.location.href = 'visualizacion.html';
-        }
-
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     </script>
 </body>
