@@ -3,33 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../Energy Saver/css/estilos.css">
     <link rel="stylesheet" href="../Energy Saver/css/grafica.css">
     <link rel="icon" href="../Energy Saver/img/logotipo.ico" type="image/x-icon">
     <title>Consejos y Recomendaciones</title>
     <style>
-        .transparent-container {
-            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con 80% de opacidad */
-            padding: 20px;
-            border-radius: 10px;
-        }
         .recomendaciones-container {
             width: 70%;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
         }
-        .recomendaciones {
-            list-style-type: none;
-            padding: 0;
-        }
-        .recomendaciones li {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
-<body style="margin: 0; font-family: Arial, sans-serif; background: url('img/Fondo.jpg') no-repeat center center fixed; background-size: cover;">
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #00A698;">
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -42,16 +31,10 @@
                 <a class="nav-link" href="calcu.html">Calculadora</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="productos.html">Productos</a>
+                <a class="nav-link" href="productos.html">Asociaciones</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="contacto.html">Contacto</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="grafica.html">Gráfica</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="consejos.html">Consejos y Recomendaciones</a>
               </li>
             </ul>
           </div>
@@ -60,11 +43,11 @@
 
     <div class="recomendaciones-container">
         <h1>Consejos y Recomendaciones</h1>
-        <ul class="recomendaciones" id="recomendacionesList">
+        <div class="row" id="recomendacionesList">
             <!-- Las recomendaciones se cargarán aquí -->
-        </ul>
-        <div class="button-container transparent-container">
-            <button onclick="location.href='visualizacion.html'">Volver a la Gráfica</button>
+        </div>
+        <div class="button-container transparent-container mt-4">
+            <button class="btn btn-primary" onclick="location.href='visualizacion.html'">Volver a la Gráfica</button>
         </div>
     </div>
 
@@ -75,55 +58,102 @@
 
             var recomendaciones = {
                 bajo: [
-                    "Apaga las luces cuando no las necesites.",
-                    "Desconecta los electrodomésticos que no uses.",
-                    "Aprovecha la luz natural.",
-                    "Utiliza bombillas LED.",
-                    "Mantén limpio el filtro de aire del aire acondicionado.",
-                    "Utiliza programas de ahorro en la lavadora.",
-                    "Seca la ropa al aire libre en lugar de usar la secadora.",
-                    "Revisa que el refrigerador esté bien cerrado.",
-                    "Usa electrodomésticos eficientes.",
-                    "No dejes los cargadores enchufados si no están en uso.",
+                    "Utilice iluminación LED de alta eficiencia para todas sus necesidades de iluminación.",
+                    "Aproveche la luz natural tanto como sea posible para reducir el uso de electricidad.",
+                    "Desenchufe los dispositivos electrónicos cuando no estén en uso para evitar el consumo en modo standby.",
+                    "Instale temporizadores o sensores de movimiento para las luces en áreas comunes.",
+                    "Realice mantenimiento regular a sus electrodomésticos para asegurar su eficiencia.",
+                    "Ajuste el termostato a una temperatura eficiente tanto en verano como en invierno.",
+                    "Utilice ventiladores de techo en lugar de aire acondicionado siempre que sea posible.",
+                    "Aísle su hogar adecuadamente para mantener la temperatura interior sin recurrir a la calefacción o refrigeración excesiva.",
+                    "Lave la ropa en ciclos cortos y con agua fría para ahorrar energía.",
+                    "Seque la ropa al aire libre en lugar de utilizar la secadora.",
+                    "Reemplace los filtros del aire acondicionado regularmente.",
+                    "Utilice electrodomésticos certificados con Energy Star.",
+                    "Instale cortinas térmicas para mantener la temperatura interior.",
+                    "Utilice regletas de enchufes inteligentes para gestionar el consumo de múltiples dispositivos.",
+                    "Apague las luces y dispositivos electrónicos cuando no estén en uso.",
+                    "Utilice programas de ahorro de energía en su lavadora y lavavajillas.",
+                    "Ajuste la temperatura del calentador de agua a un nivel eficiente.",
+                    "Realice auditorías energéticas periódicas para identificar áreas de mejora.",
+                    "Invierta en electrodomésticos de alta eficiencia energética.",
+                    "Implemente un sistema de gestión de energía en su hogar."
                 ],
                 moderado: [
-                    "Reduce el uso del aire acondicionado.",
-                    "Apaga los equipos electrónicos en lugar de dejarlos en standby.",
-                    "Optimiza el uso de la calefacción.",
-                    "Usa regletas para desconectar varios dispositivos a la vez.",
-                    "Ajusta el termostato del calentador de agua.",
-                    "Instala ventanas de doble acristalamiento.",
-                    "Revisa el aislamiento de tu hogar.",
-                    "Cambia los filtros del aire acondicionado regularmente.",
-                    "Usa la lavadora y lavavajillas solo con carga completa.",
-                    "Reduce el tiempo de uso del horno eléctrico.",
+                    "Realice auditorías energéticas profesionales para identificar oportunidades de ahorro de energía.",
+                    "Instale termostatos programables para optimizar el uso de calefacción y aire acondicionado.",
+                    "Utilice electrodomésticos de alta eficiencia energética en todas las áreas de su hogar.",
+                    "Aisle adecuadamente su hogar para reducir las pérdidas de calor y frío.",
+                    "Reemplace ventanas antiguas por modelos de doble acristalamiento para mejorar el aislamiento.",
+                    "Utilice sistemas de iluminación inteligente para reducir el consumo energético.",
+                    "Apague completamente los dispositivos electrónicos en lugar de dejarlos en modo standby.",
+                    "Instale paneles solares para generar energía renovable y reducir la dependencia de la red eléctrica.",
+                    "Optimice el uso de la calefacción y aire acondicionado mediante el uso de termostatos programables.",
+                    "Use ventiladores de techo para mejorar la circulación del aire y reducir la necesidad de aire acondicionado.",
+                    "Utilice electrodomésticos con certificación Energy Star.",
+                    "Implementar un sistema de gestión de energía para monitorear y controlar el consumo energético en tiempo real.",
+                    "Instale sensores de movimiento para las luces en áreas de poco uso.",
+                    "Reduzca el uso del aire acondicionado y utilice ventiladores cuando sea posible.",
+                    "Utilice cortinas y persianas para bloquear el calor del sol durante el verano.",
+                    "Aproveche la ventilación natural para reducir la necesidad de refrigeración artificial.",
+                    "Realice mantenimiento regular a su sistema de calefacción y aire acondicionado.",
+                    "Optimice el uso de la lavadora y lavavajillas utilizándolos solo con carga completa.",
+                    "Reduzca el tiempo de uso del horno eléctrico y utilice métodos de cocción alternativos.",
+                    "Cree hábitos de consumo energético responsables entre todos los miembros del hogar."
                 ],
                 alto: [
-                    "Considera la instalación de paneles solares.",
-                    "Reemplaza los electrodomésticos antiguos por modelos eficientes.",
-                    "Instala un sistema de gestión de energía en tu hogar.",
-                    "Revisa la tarifa eléctrica contratada.",
-                    "Realiza auditorías energéticas periódicas.",
-                    "Invierte en aislamiento térmico para tu hogar.",
-                    "Usa ventiladores de techo para reducir el uso de aire acondicionado.",
-                    "Controla el uso de la calefacción y aire acondicionado con termostatos programables.",
-                    "Implementa un sistema de iluminación inteligente.",
-                    "Considera el uso de energía renovable.",
+                    "Considere la instalación de sistemas de energía renovable como paneles solares o turbinas eólicas.",
+                    "Reemplace los sistemas de calefacción y refrigeración antiguos por bombas de calor de alta eficiencia.",
+                    "Utilice sistemas de domótica para controlar y reducir el consumo energético en su hogar.",
+                    "Realice auditorías energéticas periódicas con un profesional para identificar áreas de mejora.",
+                    "Invierta en electrodomésticos de última generación con alta eficiencia energética.",
+                    "Instale aislantes térmicos avanzados en paredes, techos y pisos para mejorar el aislamiento.",
+                    "Implemente un programa de mantenimiento regular para todos los sistemas energéticos de su hogar.",
+                    "Cámbiese a tarifas de electricidad que premian el consumo en horas valle.",
+                    "Promueva el uso de transporte eléctrico y estaciones de carga en su hogar.",
+                    "Participe en programas de ahorro energético ofrecidos por su proveedor de energía.",
+                    "Utilice aplicaciones de monitoreo del consumo energético para identificar patrones y oportunidades de ahorro.",
+                    "Invierta en sistemas de almacenamiento de energía para aprovechar al máximo la energía renovable generada.",
+                    "Utilice iluminación natural siempre que sea posible y complemente con iluminación LED.",
+                    "Optimice el uso de la calefacción y aire acondicionado mediante el uso de termostatos inteligentes.",
+                    "Reemplace electrodomésticos viejos por modelos más eficientes y de menor consumo energético.",
+                    "Utilice cortinas térmicas y persianas para mejorar el aislamiento de las ventanas.",
+                    "Aproveche la energía solar pasiva mediante el diseño arquitectónico de su hogar.",
+                    "Fomente la cultura del ahorro energético entre los miembros de su hogar.",
+                    "Establezca metas de reducción de consumo energético y realice un seguimiento regular de su progreso.",
+                    "Participe en programas de certificación energética para su hogar y siga las recomendaciones proporcionadas."
                 ]
             };
 
             if (consumptionLevel && recomendaciones[consumptionLevel]) {
                 recomendaciones[consumptionLevel].forEach(function(consejo) {
-                    var li = document.createElement('li');
-                    li.textContent = consejo;
-                    recomendacionesList.appendChild(li);
+                    var card = document.createElement('div');
+                    card.className = 'col-md-4 mb-3';
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">${consejo}</p>
+                            </div>
+                        </div>
+                    `;
+                    recomendacionesList.appendChild(card);
                 });
             } else {
-                var li = document.createElement('li');
-                li.textContent = 'No hay recomendaciones disponibles.';
-                recomendacionesList.appendChild(li);
+                var card = document.createElement('div');
+                card.className = 'col-md-12';
+                card.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">No hay recomendaciones disponibles.</p>
+                        </div>
+                    </div>
+                `;
+                recomendacionesList.appendChild(card);
             }
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
