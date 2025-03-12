@@ -12,7 +12,7 @@
         /* Estilos para el cuerpo de la página */
         body {
             font-family: Arial, sans-serif;
-            background-color: #324016; /* Verde oscuro */
+            background-color: #117f55; /* Verde oscuro */
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -69,10 +69,18 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             transition: box-shadow 0.3s;
+            text-align: center; /* Centra el contenido dentro del contenedor */
         }
 
         .info:hover {
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .info img {
+            display: block;
+            margin: 0 auto; /* Centra la imagen horizontalmente */
+            max-width: 100%; /* Asegura que la imagen no se salga del contenedor */
+            height: auto;
         }
 
         .info-text {
@@ -123,6 +131,7 @@
     </nav>
     <div class="container">
         <div class="info">
+            <img src="../Energy Saver/img/logotipo.jpeg" alt="Logotipo de Energy Saver">
             <p class="info-text">Somos una página web para ahorrar energía en el hogar. Ofrecemos soluciones inteligentes para optimizar el consumo y reducir el desperdicio.</p>
             <p class="info-text">¿Interesado en conocer más? Explora nuestras secciones o ponte en contacto con nosotros.</p>
         </div>
